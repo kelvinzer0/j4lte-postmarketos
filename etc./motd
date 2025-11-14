@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Colors
+BLUE='\033[38;5;81m'
+PINK='\033[38;5;198m'
+GREEN='\033[38;5;118m'
+YELLOW='\033[38;5;227m'
+RED='\033[38;5;196m'
+NC='\033[0m'
+
+echo -e "${BLUE}"
+cat << 'EOF'
+    ███╗   ███╗ ██████╗ ██████╗  █████╗ ██╗         ██████╗ ███████╗
+    ████╗ ████║██╔═══██╗██╔══██╗██╔══██╗██║         ██╔══██╗██╔════╝
+    ██╔████╔██║██║   ██║██████╔╝███████║██║         ██║  ██║███████╗
+    ██║╚██╔╝██║██║   ██║██╔══██╗██╔══██║██║         ██║  ██║╚════██║
+    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║  ██║███████╗    ██████╔╝███████║
+    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚═════╝ ╚══════╝
+EOF
+
+echo -e "${PINK}"
+echo "            ╔══════════════════════════════════════════╗"
+echo "            ║           ETHICAL CYBER SYSTEM          ║"
+echo "            ║              v2.1.5 - NEURAL            ║"
+echo "            ╚══════════════════════════════════════════╝"
+echo -e "${NC}"
+
+# System Information
+echo -e "${GREEN}"
+echo "┌──────────────── SYSTEM STATUS ─────────────────┐"
+echo -e "│ ${YELLOW}• Hostname:${GREEN} $(hostname)$(printf '%*s' $((25-${#hostname})) ) │"
+echo -e "│ ${YELLOW}• OS:${GREEN} $(lsb_release -d | cut -f2)$(printf '%*s' $((33-$(lsb_release -d | cut -f2 | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Kernel:${GREEN} $(uname -r)$(printf '%*s' $((30-$(uname -r | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Uptime:${GREEN} $(uptime -p | sed 's/up //')$(printf '%*s' $((31-$(uptime -p | sed 's/up //' | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Load:${GREEN} $(uptime | awk -F'load average:' '{print $2}' | sed 's/^ //')$(printf '%*s' $((34-$(uptime | awk -F'load average:' '{print $2}' | sed 's/^ //' | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Memory:${GREEN} $(free -h | awk '/^Mem:/ {print $3 "/" $2}') used$(printf '%*s' $((26-$(free -h | awk '/^Mem:/ {print $3 "/" $2}' | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Disk:${GREEN} $(df -h / | awk 'NR==2 {print $4 " free"}')$(printf '%*s' $((32-$(df -h / | awk 'NR==2 {print $4 " free"}' | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Users:${GREEN} $(who | wc -l) connected$(printf '%*s' $((26-$(who | wc -l | wc -c))) ) │"
+echo -e "│ ${YELLOW}• Security:${GREEN} Firewall Active$(printf '%*s' $((24)) ) │"
+echo "└────────────────────────────────────────────────┘"
+echo -e "${NC}"
