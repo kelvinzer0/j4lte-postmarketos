@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/sh
 
 # Colors (simplified for ash)
 BLUE='\033[38;5;81m'
