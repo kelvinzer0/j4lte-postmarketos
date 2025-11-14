@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-# Colors
+# Colors (simplified for ash)
 BLUE='\033[38;5;81m'
 PINK='\033[38;5;198m'
 GREEN='\033[38;5;118m'
@@ -8,7 +8,7 @@ YELLOW='\033[38;5;227m'
 RED='\033[38;5;196m'
 NC='\033[0m'
 
-echo -e "${BLUE}"
+printf "${BLUE}"
 cat << 'EOF'
     ███╗   ███╗ ██████╗ ██████╗  █████╗ ██╗         ██████╗ ███████╗
     ████╗ ████║██╔═══██╗██╔══██╗██╔══██╗██║         ██╔══██╗██╔════╝
@@ -18,24 +18,70 @@ cat << 'EOF'
     ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝    ╚═════╝ ╚══════╝
 EOF
 
-echo -e "${PINK}"
+printf "${PINK}"
 echo "            ╔══════════════════════════════════════════╗"
 echo "            ║           ETHICAL CYBER SYSTEM          ║"
 echo "            ║              v2.1.5 - NEURAL            ║"
 echo "            ╚══════════════════════════════════════════╝"
-echo -e "${NC}"
+printf "${NC}"
 
 # System Information
-echo -e "${GREEN}"
+printf "${GREEN}"
 echo "┌──────────────── SYSTEM STATUS ─────────────────┐"
-echo -e "│ ${YELLOW}• Hostname:${GREEN} $(hostname)$(printf '%*s' $((25-${#hostname})) ) │"
-echo -e "│ ${YELLOW}• OS:${GREEN} $(lsb_release -d | cut -f2)$(printf '%*s' $((33-$(lsb_release -d | cut -f2 | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Kernel:${GREEN} $(uname -r)$(printf '%*s' $((30-$(uname -r | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Uptime:${GREEN} $(uptime -p | sed 's/up //')$(printf '%*s' $((31-$(uptime -p | sed 's/up //' | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Load:${GREEN} $(uptime | awk -F'load average:' '{print $2}' | sed 's/^ //')$(printf '%*s' $((34-$(uptime | awk -F'load average:' '{print $2}' | sed 's/^ //' | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Memory:${GREEN} $(free -h | awk '/^Mem:/ {print $3 "/" $2}') used$(printf '%*s' $((26-$(free -h | awk '/^Mem:/ {print $3 "/" $2}' | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Disk:${GREEN} $(df -h / | awk 'NR==2 {print $4 " free"}')$(printf '%*s' $((32-$(df -h / | awk 'NR==2 {print $4 " free"}' | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Users:${GREEN} $(who | wc -l) connected$(printf '%*s' $((26-$(who | wc -l | wc -c))) ) │"
-echo -e "│ ${YELLOW}• Security:${GREEN} Firewall Active$(printf '%*s' $((24)) ) │"
+
+# Hostname
+hostname=$(hostname)
+hostname_len=$(printf "%s" "$hostname" | wc -c)
+spaces=$((25 - hostname_len))
+printf "│ ${YELLOW}• Hostname:${GREEN} %s%${spaces}s │\n" "$hostname" ""
+
+# OS (simplified for postmarketOS)
+if [ -f /etc/os-release ]; then
+    os_name=$(grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')
+else
+    os_name="postmarketOS"
+fi
+os_len=$(printf "%s" "$os_name" | wc -c)
+spaces=$((33 - os_len))
+printf "│ ${YELLOW}• OS:${GREEN} %s%${spaces}s │\n" "$os_name" ""
+
+# Kernel
+kernel=$(uname -r)
+kernel_len=$(printf "%s" "$kernel" | wc -c)
+spaces=$((30 - kernel_len))
+printf "│ ${YELLOW}• Kernel:${GREEN} %s%${spaces}s │\n" "$kernel" ""
+
+# Uptime
+uptime_str=$(uptime -p | sed 's/up //')
+uptime_len=$(printf "%s" "$uptime_str" | wc -c)
+spaces=$((31 - uptime_len))
+printf "│ ${YELLOW}• Uptime:${GREEN} %s%${spaces}s │\n" "$uptime_str" ""
+
+# Load
+load_str=$(uptime | awk -F'load average:' '{print $2}' | sed 's/^ //')
+load_len=$(printf "%s" "$load_str" | wc -c)
+spaces=$((34 - load_len))
+printf "│ ${YELLOW}• Load:${GREEN} %s%${spaces}s │\n" "$load_str" ""
+
+# Memory
+memory_str=$(free -h | awk '/^Mem:/ {print $3 "/" $2}')
+memory_len=$(printf "%s" "$memory_str" | wc -c)
+spaces=$((26 - memory_len))
+printf "│ ${YELLOW}• Memory:${GREEN} %s used%${spaces}s │\n" "$memory_str" ""
+
+# Disk
+disk_str=$(df -h / | awk 'NR==2 {print $4 " free"}')
+disk_len=$(printf "%s" "$disk_str" | wc -c)
+spaces=$((32 - disk_len))
+printf "│ ${YELLOW}• Disk:${GREEN} %s%${spaces}s │\n" "$disk_str" ""
+
+# Users
+users_count=$(who | wc -l)
+users_str="$users_count connected"
+users_len=$(printf "%s" "$users_str" | wc -c)
+spaces=$((26 - users_len))
+printf "│ ${YELLOW}• Users:${GREEN} %s%${spaces}s │\n" "$users_str" ""
+
+echo "│ ${YELLOW}• Security:${GREEN} Firewall Active$(printf '%24s') │"
 echo "└────────────────────────────────────────────────┘"
-echo -e "${NC}"
+printf "${NC}"
